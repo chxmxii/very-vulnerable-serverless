@@ -148,7 +148,7 @@ x-amzn-RequestId: 43b9dd4a-f64b-42e0-ad5e-222209fde183
 
 ***Do not install Very Vulnerable Serverless on a production environment***
 
-We do not take responsibility for the way in which any one uses this application. We have made the purposes of the application clear and it should not be used maliciously.
+Author do not take responsibility for the way in which any one uses this application. Author have made the purpose of the application clear and it should not be used maliciously.
 
 ## License
 Very Vulnerable Lambda Application is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
