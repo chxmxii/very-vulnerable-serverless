@@ -17,6 +17,7 @@ Very Vulnerable Lambda Application is a intentionally vulnerable application aim
 - In order to package your dependencies locally with serverless-python-requirements, you need to have Python3.8 installed locally. You can create and activate a dedicated virtual environment with the following command:
 
     `python3.8 -m venv ./venv`
+    
     `source ./venv/bin/activate`
     
 - Setup [serverless framework](https://www.serverless.com/framework/docs/getting-started).
