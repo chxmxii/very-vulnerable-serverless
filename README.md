@@ -14,6 +14,10 @@ Very Vulnerable Lambda Application is a intentionally vulnerable application aim
 
     `python3.8 -m venv ./venv`
     `source ./venv/bin/activate`
+    
+- Setup [serverless framework](https://www.serverless.com/framework/docs/getting-started).
+    
+    `npm install -g serverless`
 
 - Install httpie to interact via terminal
 
