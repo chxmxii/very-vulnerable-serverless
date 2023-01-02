@@ -29,6 +29,16 @@ Very Vulnerable Lambda Application is a intentionally vulnerable application aim
     `https://httpie.io/cli`
 	
 - - -
+## Endpoints
+
+- GET /
+- GET /welcome/<name>
+- POST,GET /login
+- GET /redirect
+- GET /date
+- GET /redos
+	
+- - -
 ## Setup Instruction
 
 - Step 1: Clone vulnerable lambda application.
