@@ -144,7 +144,7 @@ x-amzn-RequestId: 43b9dd4a-f64b-42e0-ad5e-222209fde183
    `sls remove`
 
 - - -
-##Meaning of serverless.yaml
+## Meaning of serverless.yaml
 
 ```
 This is a YAML configuration file for the Serverless Framework. It is defining a service called "vulnerable-lambda" that will be deployed to the AWS cloud provider in the us-west-2 region. The service is written in Python 3.8 and has the files "app.py" and "requirements.txt" included in the package that will be deployed. The "venv" and "node_modules" directories are excluded from the package. The service uses the "serverless-python-requirements" and "serverless-wsgi" plugins, and the "wsgi" section defines the WSGI application object as "app.app" and specifies that the requirements should not be packed. There is a single function called "app" that is associated with the WSGI handler and exposes HTTP event triggers for requests to the root path ("/") and any other path ("/{proxy+}").
