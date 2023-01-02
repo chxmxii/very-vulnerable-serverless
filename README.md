@@ -141,8 +141,8 @@ x-amzn-RequestId: 43b9dd4a-f64b-42e0-ad5e-222209fde183
  
  You will see an output like this
  
-    ```
-    HTTP/1.1 502 Bad Gateway
+ ```
+HTTP/1.1 502 Bad Gateway
 Connection: keep-alive
 Content-Length: 36
 Content-Type: application/json
@@ -158,7 +158,7 @@ x-amzn-RequestId: 8e192cca-facc-4c8e-8ad2-07d1c599c854
 {
     "message": "Internal server error"
 }
-    ```
+```
 
 
 - - -
