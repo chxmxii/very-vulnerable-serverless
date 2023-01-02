@@ -3,7 +3,7 @@ import urllib.request
 import subprocess
 import json
 import datetime as date
-
+import re
 
 
 app = Flask(__name__)
@@ -53,5 +53,30 @@ def command():
     except:
         return ("Error Ocurred")
 
+# ReDoS vulnerability demonstration route
+@app.route('/redos')
+def redos():
+    try:
+        # Get user-supplied string
+        user_string = request.args.get('string')
+        
+        # Record start time
+        start_time = date.datetime.now()
 
+        # Use a maliciously-crafted regular expression that will take a long time to execute
+        malicious_regex = "^(a+)+b$"
+        
+        # Record end time
+        end_time = date.datetime.now()
 
+        # Attempt to match the user-supplied string to the regular expression
+        match = re.match(malicious_regex, user_string)
+        if match:
+            return "<html><body><p><h3 style='background-color:SpringGreen;'>String matches regex</p><p>Response time: {}</h3></p></body></html>".format(end_time - start_time)
+        else:
+            return "<html><body><p><h3 style='background-color:IndianRed;'>String does not match regex</p><p>Response time: {}</h3></p></body></html>".format(end_time - start_time)
+    except:
+
+        return ("Error Ocurred")
+        
+        
