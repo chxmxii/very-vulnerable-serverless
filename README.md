@@ -37,6 +37,7 @@ Very Vulnerable Lambda Application is a intentionally vulnerable application aim
 - GET /redirect
 - GET /date
 - GET /redos
+- GET /deserial
 	
 - - -
 ## Vulnerabilities
@@ -314,3 +315,6 @@ Very Vulnerable Lambda Application is free software: you can redistribute it and
 Very Vulnerable Lambda Application is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with Very Vulnerable Lambda Application .  If not, see http://www.gnu.org/licenses/.
+
+
+Note: Thanks to https://github.com/CalfCrusher/Python-Pickle-RCE-Exploit
