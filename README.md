@@ -39,6 +39,16 @@ Very Vulnerable Lambda Application is a intentionally vulnerable application aim
 - GET /redos
 	
 - - -
+## Vulnerabilities
+
+- Injection Vulnerability
+- SSRF/Runtime Invocation Vulnerability
+- Command Execution
+- ReDoS vulnerability
+- Python deserialization vulnerability
+- Misconfigured IAM permission
+	
+- - -
 ## Setup Instruction
 
 - Step 1: Clone vulnerable lambda application.
@@ -113,9 +123,8 @@ x-amzn-RequestId: a56op6dc-0e13-48eq-bc9e-067912db6f7b
 ```
 
 - Step 9: You should see AWS related sensitive information.
-
     
-- Step 10: To exploit command injection vulnerability:
+- Step 10: To exploit command injection vulnerability & misconfigured permissions:
 	
     `http get https://<sls-endpoint>/dev/date?exec=date`
 
