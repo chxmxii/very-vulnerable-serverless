@@ -4,7 +4,8 @@ import subprocess
 import json
 import datetime as date
 import re
-
+import pickle
+import base64
 
 app = Flask(__name__)
 app.secret_key = 'ThisisSuperFlagBySecurityDojo'
@@ -39,6 +40,7 @@ def web():
         return jsonify({"output": output}), 200
     except:
         return ("Error Ocurred")
+#S3 bucket s3://securitydojo2023
 
 #Command Execution
 @app.route('/date')
@@ -78,5 +80,38 @@ def redos():
     except:
 
         return ("Error Ocurred")
-        
-        
+
+#Reference: https://github.com/CalfCrusher/Python-Pickle-RCE-Exploit
+# Python deserialization vulnerability demonstration route - part_1
+@app.route('/deserial', methods=['POST'])
+def deserial():
+    try:
+        data = base64.urlsafe_b64decode(request.form['pickled'])
+        pickle.loads(data)
+        return 'pickled successfully', 200
+    except Exception as e:
+        return f'Error occurred while pickling: {e}', 500
+
+# Python deserialization vulnerability demonstration route - part_2
+#class AttackObject:
+#    def __init__(self):
+#        self.value = 'attack'
+
+
+#@app.route('/attack', methods=['POST'])
+#def attack():
+    
+
+    # Deserialize the user-supplied data
+    #data = request.get_data()
+    #print (data)
+    #obj = pickle.loads(data)
+    #print (obj)
+    # Return a response based on the deserialized object
+    #if obj == 'attack':
+        #return 'Attack successful!'
+    #elif isinstance(obj, AttackObject):
+        #return 'Attack detected!'
+    #else:
+        #return 'Invalid input.'
+
