@@ -295,6 +295,8 @@ Then to check the successfull execution:
 
    `sls remove`
 
+Note: It might show error in case S3 bucket is not empty.
+
 - - -
 ## Meaning of serverless.yaml
 
